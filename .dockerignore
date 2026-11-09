@@ -1,0 +1,25 @@
+# Keep the Docker build context small and reproducible.
+.git
+.gitignore
+
+# Dependencies & build output (rebuilt inside the image)
+**/venv
+**/.venv
+**/node_modules
+frontend/dist
+
+# Secrets & local state (env vars come from Render's dashboard)
+**/.env*
+!**/.env.example
+backend/instance
+*.db
+*.sqlite3
+
+# Python caches
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+
+# Docs are not needed inside the image
+docs
+*.md

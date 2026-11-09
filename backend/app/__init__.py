@@ -8,7 +8,7 @@ import glob
 import os
 from pathlib import Path
 
-from flask import Flask
+from flask import Flask, abort, send_from_directory
 from flask_cors import CORS
 
 from app.cli import register_cli
@@ -42,6 +42,46 @@ def _ensure_libpq_on_path():
             break
 
 
+def _register_spa(app):
+    """Serve the built React app from Flask for single-service deployments.
+
+    Render builds the frontend and enables this with ``SERVE_STATIC=true`` (or
+    the presence of ``RENDER_EXTERNAL_URL``), so the UI and API share one
+    origin: auth cookies, the CSRF cookie and the Vite-proxy behaviour all keep
+    working without CORS. Local development keeps using the Vite dev server and
+    tests keep receiving JSON 404s because the flag is off there.
+    """
+    flag = str(os.getenv("SERVE_STATIC", "")).strip().lower()
+    if flag not in {"1", "true", "yes", "on"} and not os.getenv("RENDER_EXTERNAL_URL"):
+        return
+
+    dist_dir = Path(app.root_path).parent.parent / "frontend" / "dist"
+    if not (dist_dir / "index.html").is_file():
+        app.logger.warning("Static frontend enabled but %s is missing", dist_dir)
+        return
+
+    @app.get("/")
+    @app.get("/<path:path>")
+    def serve_spa(path=""):
+        # API routes keep their JSON responses — an unknown /api path must
+        # never fall back to index.html.
+        if path == "api" or path.startswith("api/"):
+            abort(404)
+
+        if path:
+            candidate = dist_dir / path
+            try:
+                if candidate.is_file() and candidate.resolve().is_relative_to(
+                    dist_dir.resolve()
+                ):
+                    return send_from_directory(dist_dir, path)
+            except OSError:
+                pass  # Fall through to the SPA entry point.
+
+        # Unknown paths are client-side routes (/dashboard, /login, ...).
+        return send_from_directory(dist_dir, "index.html")
+
+
 def create_app(config_name=None, config_overrides=None):
     """Create and configure the Flask application."""
     _ensure_libpq_on_path()
@@ -61,6 +101,7 @@ def create_app(config_name=None, config_overrides=None):
     register_blueprints(app)
     register_error_handlers(app)
     register_cli(app)
+    _register_spa(app)
 
     return app
 

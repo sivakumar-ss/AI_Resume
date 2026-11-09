@@ -18,9 +18,14 @@ psycopg[binary]==3.3.6
 # ---- Environment config ----
 python-dotenv==1.2.4
 
+# ---- Production server (Render) ----
+gunicorn==23.0.0
+
 # ---- Machine Learning & NLP ----
 scikit-learn==1.9.1
 spacy==3.8.18
 PyMuPDF==2.0.0
 python-docx==1.2.0
-en-core-web-sm==3.8.0
+# spaCy models are not hosted on PyPI; install the release wheel directly so a
+# clean deployment build (Render) succeeds.
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl

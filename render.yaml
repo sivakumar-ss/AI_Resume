@@ -1,0 +1,28 @@
+# Render blueprint — deploy this repository with one click:
+# Render dashboard -> New + -> Blueprint -> select this repo.
+#
+# Creates a single Docker web service that runs the Flask API (gunicorn)
+# and serves the built React frontend from the same origin.
+services:
+  - type: web
+    name: ai-resume # public URL: https://ai-resume.onrender.com
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      # Same-origin hosting of API + UI (no CORS needed in production).
+      - key: SERVE_STATIC
+        value: "true"
+      # Paste the Supabase connection string when Render prompts:
+      # Supabase Dashboard -> Project Settings -> Database -> Connection
+      # string -> URI, using the SESSION POOLER host (IPv4). Render cannot
+      # reach Supabase's IPv6-only direct host on the free tier.
+      - key: SUPABASE_DB_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true

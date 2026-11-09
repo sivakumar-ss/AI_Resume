@@ -318,3 +318,11 @@ deployment. System design details are in
   development so cookies stay same-origin.
 - **Port already in use** — Flask: change the port in `run.py`; Vite:
   `npm run dev -- --port 5174`.
+
+## Deploy on Render
+
+One Docker service runs the Flask API **and** serves the built React app from
+the same origin (so cookies/CSRF work without CORS). Full guide:
+[`docs/deployment.md`](docs/deployment.md). Short version: push this repo to
+GitHub, then in Render choose **New + → Blueprint**, select the repo, and
+paste the Supabase **session pooler** connection URI when prompted.
