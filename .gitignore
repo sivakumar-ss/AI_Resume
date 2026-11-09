@@ -1,0 +1,45 @@
+# ---- Dependencies ----
+node_modules/
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ---- Build output ----
+dist/
+build/
+frontend/dist/
+
+# ---- Environment & secrets (keep templates only) ----
+.env
+.env.*
+!.env.example
+
+# ---- Python tooling ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---- ML artifacts (large binaries — train/regenerate instead of committing) ----
+*.pkl
+*.joblib
+*.onnx
+backend/models/artifacts/
+
+# ---- Database ----
+*.db
+*.sqlite3
+
+# ---- IDE / OS ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log
+npm-debug.log*

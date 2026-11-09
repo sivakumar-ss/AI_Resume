@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy-50: #f2f7fc;
+  --color-navy-100: #e4eef8;
+  --color-navy-200: #c4daee;
+  --color-navy-300: #93b9dd;
+  --color-navy-400: #5b92c6;
+  --color-navy-500: #3773aa;
+  --color-navy-600: #285b8c;
+  --color-navy-700: #214a72;
+  --color-navy-800: #12304f;
+  --color-navy-900: #0b1f3a;
+  --color-navy-950: #071426;
+
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9ebff;
+  --color-brand-200: #bcdcff;
+  --color-brand-300: #8ec5ff;
+  --color-brand-400: #59a4ff;
+  --color-brand-500: #2f7ff5;
+  --color-brand-600: #1a5fe0;
+  --color-brand-700: #174bc4;
+  --color-brand-800: #193f9e;
+  --color-brand-900: #19387d;
+
+  --shadow-card: 0 18px 45px -28px rgba(11, 31, 58, 0.32);
+  --shadow-lifted: 0 28px 70px -32px rgba(11, 31, 58, 0.42);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 font-sans text-slate-700 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight text-navy-900;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-navy-900;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-grid-soft {
+    background-image:
+      linear-gradient(to right, rgba(148, 163, 184, 0.13) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.13) 1px, transparent 1px);
+    background-size: 38px 38px;
+  }
+
+  .hero-glow {
+    background:
+      radial-gradient(circle at 18% 20%, rgba(89, 164, 255, 0.2), transparent 34rem),
+      radial-gradient(circle at 82% 10%, rgba(142, 197, 255, 0.26), transparent 30rem),
+      linear-gradient(180deg, #f7fbff 0%, #eef6ff 58%, #ffffff 100%);
+  }
+
+  .auth-glow {
+    background:
+      radial-gradient(circle at 15% 15%, rgba(89, 164, 255, 0.22), transparent 28rem),
+      radial-gradient(circle at 85% 80%, rgba(47, 127, 245, 0.16), transparent 24rem),
+      #f6faff;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+  }
+}
